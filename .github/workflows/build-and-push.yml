@@ -36,8 +36,6 @@ jobs:
           tags: |
             medi-0:latest 
           # build on feature branches, push only on dev and main branch
-          push:
-            - ${{ github.ref == 'refs/heads/dev' }}
-            - ${{ github.ref == 'refs/heads/main' }}
+          push: ${{ github.ref == 'refs/heads/dev' }} || ${{ github.ref == 'refs/heads/main' }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
