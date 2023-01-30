@@ -71,7 +71,7 @@ const uploadFiles = (req: any, res: any) => {
 // app.post("/uploadfile", uploadFiles);
 // app.post("/uploadfile", upload.array("files"), uploadFiles);
 // works
-app.post("/uploadfile", upload.array("file"), uploadFiles);
+// app.post("/uploadfile", upload.array("file"), uploadFiles);
 // test single handler
 app.post("/uploadfile", uploadFiles);
 
