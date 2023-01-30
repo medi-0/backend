@@ -17,4 +17,4 @@ benchmarks/graphs
 # extras
 dist
 .DS_Store
-upload*
+uploads/**
