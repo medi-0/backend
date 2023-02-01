@@ -40,5 +40,8 @@ export const createPdf = async (req: any, res: any) => {
     // HTTP response only to show pdf
     doc.pipe(res);
     doc.end();
-    res.status(200).json({ data: pdfPath.slice(1) });
+    // res.status(200).json({ data: pdfPath.slice(1) });
+    // this should work but it doesn't
+    // return res.status(200).json({ data: pdfPath.slice(1) });
+    
 }  
