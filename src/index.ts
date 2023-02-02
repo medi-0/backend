@@ -6,14 +6,16 @@ import fs from "fs";
 import bodyParse from 'body-parser'
 import { upload, parsePdf } from './routes/upload-parse-pdf';
 import { createPdf } from './routes/create-pdf';
+import { createQRPdf } from './routes/create-qr-pdf';
 import cors from 'cors'
 // create folder 
-var dir = './pdfs';
-
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+const dirList = ['./qrs', './pdfs']
+// var dir = './pdfs';
+for (const dir of dirList) {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
 }
-
 
 const app = express()
 const port = 5001
@@ -36,6 +38,6 @@ app.post("/processpdf", upload.array("file"), parsePdf);
 
 app.post("/createpdf", createPdf);
 
-
+app.post("/createqrpdf", createQRPdf);
 // final
 app.listen(port, () => console.log(`Running on port ${port}`))
