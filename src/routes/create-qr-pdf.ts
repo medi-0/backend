@@ -8,12 +8,19 @@ interface QrData {
     text: string;
     data: string;
 }
+const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
 
 export const createQRPdf = async (req: Request, res: Response) => {
     const qrData: QrData = JSON.parse(req.body.data)
     console.log(qrData.filename)
     console.log(qrData.data)
-    const qrPath = './qrs/' + qrData.filename + '.png'
+    // const qrPath = './qrs/' + qrData.filename + '.png'
+    const qrPath = process.cwd() + '/' + 'qrs/' + qrData.filename + '.png'
+    console.log(`qrPath:${qrPath}`)
+    // const qrWriteStream = fs.createWriteStream(qrPath);
+    const pdfPath = process.cwd() + '/' + 'pdfs/' + qrData.filename + '.pdf'
+    console.log(`pdfPath:${pdfPath}`)
+
     try {
         const qrImage = qr.image(
             qrData.data,
@@ -23,17 +30,19 @@ export const createQRPdf = async (req: Request, res: Response) => {
         )
         // write to file
         // const qrPath = './qrs/' + 'test' + '.png'
-        qrImage.pipe(require('fs').createWriteStream(qrPath));
+        qrImage.pipe(require('fs').createWriteStream(qrPath)) // this works
+        // qrImage.pipe(qrWriteStream)
+        
 
     } catch (error) {
-        console.log(error);
+        console.log(`error in qr generation:${error}`);
         res.status(500).json({ error: 'QR generation went wrong' });
     }
-    // create pdf 
-    const pdfWithExt = qrData.filename + ".pdf"
-    const pdfPath = "./pdfs/" + pdfWithExt
 
+    // sleep 5 seconds to allow qr image to be written to file
+    await sleep(5000)
     try {
+
         const doc = new PDFDocument(
             {
                 size: "A4",
@@ -52,9 +61,9 @@ export const createQRPdf = async (req: Request, res: Response) => {
         // Finalize PDF file
         doc.end();
     } catch (error) {
-        console.log(error);
+        console.log(`error in qr pdf generation:${error}`);
         res.status(500).json({ error: 'QR PDF generation went wrong' });
 
     }
-
+ 
 } 
