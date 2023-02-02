@@ -15,7 +15,12 @@ buildaws: # runs build and push to dockerhub
 	@docker build --platform linux/amd64 -t 0xkeivin/pubrepo:latest . 
 	@docker push 0xkeivin/pubrepo:latest
 
-run: # runs docker locally
+runaws: # runs docker from aws container
+	@docker run -p 80:5001 0xkeivin/pubrepo:latest
+
+buildlocal: # runs build and push to dockerhub
+	@docker build -t medi0 .
+runlocal: # runs docker locally
 	@docker run -p 80:5001 medi0
 
 help: ## Show this help
