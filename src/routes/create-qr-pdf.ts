@@ -8,7 +8,7 @@ interface QrData {
     text: string;
     data: string;
 }
-const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
 export const createQRPdf = async (req: Request, res: Response) => {
     const qrData: QrData = JSON.parse(req.body.data)
@@ -32,7 +32,7 @@ export const createQRPdf = async (req: Request, res: Response) => {
         // const qrPath = './qrs/' + 'test' + '.png'
         qrImage.pipe(require('fs').createWriteStream(qrPath)) // this works
         // qrImage.pipe(qrWriteStream)
-        
+
 
     } catch (error) {
         console.log(`error in qr generation:${error}`);
@@ -42,13 +42,13 @@ export const createQRPdf = async (req: Request, res: Response) => {
     // sleep 5 seconds to allow qr image to be written to file
     await sleep(5000)
     try {
-
         const doc = new PDFDocument(
             {
                 size: "A4",
                 margin: 50
             }
         )
+        doc.fontSize(8);
         const writeStream = fs.createWriteStream(pdfPath);
         doc.pipe(writeStream);
         doc.text(qrData.text)
@@ -57,7 +57,13 @@ export const createQRPdf = async (req: Request, res: Response) => {
             // align: 'center',
             // valign: 'center'
         });
-
+        // header
+        // doc.fontSize(6);
+        doc.text(
+            "Powered by Medi-0",
+            460, // x 
+            10, // y
+        )
         // Finalize PDF file
         doc.end();
     } catch (error) {
@@ -65,5 +71,5 @@ export const createQRPdf = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'QR PDF generation went wrong' });
 
     }
- 
+
 } 
