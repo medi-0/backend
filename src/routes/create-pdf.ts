@@ -4,6 +4,7 @@ import PDFDocument from 'pdfkit-table'
 
 interface PdfTable {
     title: string;
+    text: string;
     headers: string[];
     rows: string[][];
 }
@@ -28,14 +29,21 @@ export const createPdf = async (req: any, res: any) => {
     const pdfWithExt = reqObj.title + ".pdf"
     const pdfPath = "./pdfs/" + pdfWithExt
     console.log(`pdfPath:${pdfPath}`)
-    // create a stream
     const writeStream = fs.createWriteStream(pdfPath);
     doc.pipe(writeStream);
     const reqTableArray = {
+        title: reqObj.title,
+        subtitle: reqObj.text,
         headers: reqObj.headers,
         rows: reqObj.rows,
     }
+    // console.log(`reqTableArray${JSON.stringify(reqTableArray)}}`)
     doc.table(reqTableArray)
+    doc.text(
+        "Powered by Medi-0",
+        460, // x 
+        10, // y
+    )
     // if your run express.js server:
     // HTTP response only to show pdf
     doc.pipe(res);
@@ -43,5 +51,5 @@ export const createPdf = async (req: any, res: any) => {
     // res.status(200).json({ data: pdfPath.slice(1) });
     // this should work but it doesn't
     // return res.status(200).json({ data: pdfPath.slice(1) });
-    
+
 }  
