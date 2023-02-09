@@ -10,14 +10,30 @@ interface PdfTable {
 }
 export const createPdf = async (req: any, res: any) => {
     console.log("/createpdf called")
-    const reqJson = req.body.data
+    const req1 = req.body
+    console.log(`req1:${JSON.stringify(req1)}`)
+    // const reqJson = req.body.data
+    const reqJson = req.body
+    console.log(`reqJson:${JSON.stringify(reqJson)}`)
     // convert json to object 
-    const reqObj: PdfTable = JSON.parse(reqJson)
+    var reqObj: PdfTable = {
+        title: "",
+        text: "",
+        headers: [],
+        rows: []
+    }
+    try {
+        reqObj = reqJson
+    } catch (error) {
+        console.log(`error:${error}`)
+    }
+    console.log(`reqObj:${reqObj}`)
     if (reqObj.headers.length === 0 || reqObj.rows.length === 0) {
         res.status(400).json({ error: "No data to create pdf" });
         return
     }
     console.log(reqObj)
+    console.log(JSON.stringify(reqObj))
 
     // pdftable
     const doc = new PDFDocument(
@@ -40,7 +56,7 @@ export const createPdf = async (req: any, res: any) => {
     // console.log(`reqTableArray${JSON.stringify(reqTableArray)}}`)
     doc.table(reqTableArray)
     doc.text(
-        "Powered by Medi-0",
+        "Powered by ZKDoc",
         460, // x 
         10, // y
     )

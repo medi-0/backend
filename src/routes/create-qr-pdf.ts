@@ -60,7 +60,7 @@ export const createQRPdf = async (req: Request, res: Response) => {
         // header
         // doc.fontSize(6);
         doc.text(
-            "Powered by Medi-0",
+            "Powered by ZKDoc",
             460, // x 
             10, // y
         )
